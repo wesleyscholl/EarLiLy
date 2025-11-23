@@ -46,9 +46,10 @@ struct Flashcard: Identifiable, Codable, Equatable {
         return Double(timesCorrect) / Double(timesShown)
     }
     
-    enum Category: String, Codable, CaseIterable {
+    enum Category: String, Codable, CaseIterable, Identifiable {
         case animals = "Animals"
         case food = "Food"
+        case objects = "Objects"
         case colors = "Colors"
         case numbers = "Numbers"
         case shapes = "Shapes"
@@ -56,10 +57,13 @@ struct Flashcard: Identifiable, Codable, Equatable {
         case toys = "Toys"
         case nature = "Nature"
         
+        var id: String { self.rawValue }
+        
         var icon: String {
             switch self {
             case .animals: return "🐾"
             case .food: return "🍎"
+            case .objects: return "🎯"
             case .colors: return "🎨"
             case .numbers: return "🔢"
             case .shapes: return "⭐️"
@@ -73,6 +77,7 @@ struct Flashcard: Identifiable, Codable, Equatable {
             switch self {
             case .animals: return .orange
             case .food: return .red
+            case .objects: return .indigo
             case .colors: return .purple
             case .numbers: return .blue
             case .shapes: return .yellow
@@ -93,60 +98,114 @@ struct Flashcard: Identifiable, Codable, Equatable {
 // MARK: - Sample Data
 extension Flashcard {
     static let sampleData: [Flashcard] = [
+        // Animals
         Flashcard(
-            word: "Cat",
-            imageName: "cat",
-            translations: ["es": "Gato", "fr": "Chat"],
+            word: "Tiger",
+            imageName: "Animals/tiger",
+            translations: ["es": "Tigre", "fr": "Tigre"],
             category: .animals,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Dog",
-            imageName: "dog",
-            translations: ["es": "Perro", "fr": "Chien"],
+            word: "Zebra",
+            imageName: "Animals/zebra",
+            translations: ["es": "Cebra", "fr": "Zèbre"],
             category: .animals,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Apple",
-            imageName: "apple",
-            translations: ["es": "Manzana", "fr": "Pomme"],
+            word: "Turkey",
+            imageName: "Animals/turkey",
+            translations: ["es": "Pavo", "fr": "Dinde"],
+            category: .animals,
+            difficulty: .easy
+        ),
+        Flashcard(
+            word: "Turtle",
+            imageName: "Animals/turtle",
+            translations: ["es": "Tortuga", "fr": "Tortue"],
+            category: .animals,
+            difficulty: .easy
+        ),
+        Flashcard(
+            word: "Whale",
+            imageName: "Animals/whale",
+            translations: ["es": "Ballena", "fr": "Baleine"],
+            category: .animals,
+            difficulty: .easy
+        ),
+        
+        // Food
+        Flashcard(
+            word: "Pumpkin",
+            imageName: "Food/pumpkin",
+            translations: ["es": "Calabaza", "fr": "Citrouille"],
             category: .food,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Banana",
-            imageName: "banana",
-            translations: ["es": "Plátano", "fr": "Banane"],
+            word: "Strawberry",
+            imageName: "Food/strawberry",
+            translations: ["es": "Fresa", "fr": "Fraise"],
             category: .food,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Red",
-            imageName: "red",
-            translations: ["es": "Rojo", "fr": "Rouge"],
-            category: .colors,
+            word: "Watermelon",
+            imageName: "Food/watermelon",
+            translations: ["es": "Sandía", "fr": "Pastèque"],
+            category: .food,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Blue",
-            imageName: "blue",
-            translations: ["es": "Azul", "fr": "Bleu"],
-            category: .colors,
+            word: "Pepper",
+            imageName: "Food/pepper",
+            translations: ["es": "Pimiento", "fr": "Poivron"],
+            category: .food,
             difficulty: .easy
         ),
         Flashcard(
-            word: "One",
-            imageName: "one",
-            translations: ["es": "Uno", "fr": "Un"],
-            category: .numbers,
+            word: "Tomato",
+            imageName: "Food/tomato",
+            translations: ["es": "Tomate", "fr": "Tomate"],
+            category: .food,
+            difficulty: .easy
+        ),
+        
+        // Objects
+        Flashcard(
+            word: "Wand",
+            imageName: "Objects/wand",
+            translations: ["es": "Varita", "fr": "Baguette"],
+            category: .objects,
             difficulty: .easy
         ),
         Flashcard(
-            word: "Two",
-            imageName: "two",
-            translations: ["es": "Dos", "fr": "Deux"],
-            category: .numbers,
+            word: "Xylophone",
+            imageName: "Objects/xylophone",
+            translations: ["es": "Xilófono", "fr": "Xylophone"],
+            category: .objects,
+            difficulty: .easy
+        ),
+        Flashcard(
+            word: "Violin",
+            imageName: "Objects/violin",
+            translations: ["es": "Violín", "fr": "Violon"],
+            category: .objects,
+            difficulty: .easy
+        ),
+        Flashcard(
+            word: "Yo-Yo",
+            imageName: "Objects/yo-yo",
+            translations: ["es": "Yoyó", "fr": "Yoyo"],
+            category: .objects,
+            difficulty: .easy
+        ),
+        Flashcard(
+            word: "World",
+            imageName: "Objects/world",
+            translations: ["es": "Mundo", "fr": "Monde"],
+            category: .objects,
             difficulty: .easy
         )
     ]

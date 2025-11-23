@@ -24,9 +24,9 @@ class ImagenFlashcardGenerator:
     """Generate images using Imagen 3 API"""
     
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv('GOOGLE_API_KEY')
+        self.api_key = api_key or os.getenv('GEMINI_API_KEY')
         if not self.api_key:
-            raise ValueError("GOOGLE_API_KEY not found. Get it from https://aistudio.google.com/app/apikey")
+            raise ValueError("GEMINI_API_KEY not found. Get it from https://aistudio.google.com/app/apikey")
         
         # Imagen 3 API endpoint
         self.api_endpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict"

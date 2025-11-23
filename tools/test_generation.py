@@ -25,9 +25,9 @@ def test_generation():
     print("")
     
     # Check API key
-    api_key = os.getenv('GOOGLE_API_KEY')
+    api_key = os.getenv('GEMINI_API_KEY')
     if not api_key or api_key == 'your_api_key_here':
-        print("❌ Error: GOOGLE_API_KEY not configured")
+        print("❌ Error: GEMINI_API_KEY not configured")
         print("")
         print("Please edit the .env file and add your API key:")
         print("  1. Get key from: https://aistudio.google.com/app/apikey")

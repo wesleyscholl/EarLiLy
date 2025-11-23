@@ -64,6 +64,9 @@ struct CategorySelectionView: View {
                     ForEach(Flashcard.Category.allCases, id: \.self) { category in
                         GameCategoryCard(category: category)
                             .onTapGesture {
+                                let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                                impactMed.impactOccurred()
+                                
                                 withAnimation(.spring()) {
                                     selectedCategory = category
                                     isPlaying = true
@@ -246,6 +249,10 @@ struct MatchingGameView: View {
               !selectedCards.contains(card),
               selectedCards.count < 2 else { return }
         
+        // Haptic feedback on card tap
+        let impactLight = UIImpactFeedbackGenerator(style: .light)
+        impactLight.impactOccurred()
+        
         selectedCards.append(card)
         
         if selectedCards.count == 2 {
@@ -262,6 +269,9 @@ struct MatchingGameView: View {
         
         if first.flashcard.id == second.flashcard.id && first.type != second.type {
             // Match found!
+            let successHaptic = UINotificationFeedbackGenerator()
+            successHaptic.notificationOccurred(.success)
+            
             withAnimation(.spring()) {
                 matchedCards.insert(first.id)
                 matchedCards.insert(second.id)
@@ -286,6 +296,9 @@ struct MatchingGameView: View {
             }
         } else {
             // No match
+            let errorHaptic = UINotificationFeedbackGenerator()
+            errorHaptic.notificationOccurred(.error)
+            
             wrongGuess = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

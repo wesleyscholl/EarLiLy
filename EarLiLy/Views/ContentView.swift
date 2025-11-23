@@ -126,12 +126,14 @@ struct HomeView: View {
                         // Category grid
                         LazyVGrid(columns: columns, spacing: 16) {
                             ForEach(Flashcard.Category.allCases, id: \.self) { category in
-                                CategoryCard(category: category)
-                                    .onTapGesture {
-                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                            selectedCategory = category
-                                        }
-                                    }
+                                Button {
+                                    let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                                    impactMed.impactOccurred()
+                                    selectedCategory = category
+                                } label: {
+                                    CategoryCard(category: category)
+                                }
+                                .buttonStyle(PressableButtonStyle())
                             }
                         }
                         .padding(.horizontal)
@@ -150,7 +152,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .sheet(item: $selectedCategory) { category in
+            .fullScreenCover(item: $selectedCategory) { category in
                 FlashcardListView(category: category)
             }
             .sheet(isPresented: $showingAddCard) {
@@ -187,12 +189,15 @@ struct CategoryCard: View {
                 )
                 .shadow(color: category.color.opacity(0.4), radius: 8, x: 0, y: 4)
         )
-        .scaleEffect(isPressed ? 0.95 : 1.0)
-        .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                isPressed = pressing
-            }
-        }) {}
+    }
+}
+
+// MARK: - Pressable Button Style
+struct PressableButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 

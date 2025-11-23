@@ -25,6 +25,68 @@ class FlashcardStore: ObservableObject {
         loadStatistics()
     }
     
+    // MARK: - Dynamic Image Loading
+    
+    static func loadFlashcardsFromImages() -> [Flashcard] {
+        var flashcards: [Flashcard] = []
+        
+        // Debug: Print bundle resource path
+        if let resourcePath = Bundle.main.resourcePath {
+            print("📦 Bundle resource path: \(resourcePath)")
+            
+            // Check if Images directory exists
+            let imagesPath = resourcePath + "/Images"
+            if FileManager.default.fileExists(atPath: imagesPath) {
+                print("✅ Images directory exists at: \(imagesPath)")
+            } else {
+                print("❌ Images directory NOT found at: \(imagesPath)")
+            }
+        }
+        
+        let categories: [(Flashcard.Category, String)] = [
+            (.animals, "Animals"),
+            (.food, "Food"),
+            (.objects, "Objects")
+        ]
+        
+        for (category, directoryName) in categories {
+            if let resourcePath = Bundle.main.resourcePath {
+                let categoryPath = resourcePath + "/Images/\(directoryName)"
+                print("🔍 Checking category: \(directoryName) at \(categoryPath)")
+                
+                if let enumerator = FileManager.default.enumerator(atPath: categoryPath) {
+                    var count = 0
+                    while let filename = enumerator.nextObject() as? String {
+                        if filename.hasSuffix(".png") {
+                            count += 1
+                            // Remove .png extension
+                            let nameWithoutExtension = filename.replacingOccurrences(of: ".png", with: "")
+                            
+                            // Capitalize first letter and format word
+                            let word = nameWithoutExtension.prefix(1).uppercased() + nameWithoutExtension.dropFirst()
+                            
+                            let imageName = "\(directoryName)/\(nameWithoutExtension)"
+                            
+                            print("   📸 Found: \(filename) -> Word: '\(word)', ImageName: '\(imageName)'")
+                            
+                            let flashcard = Flashcard(
+                                word: word,
+                                imageName: imageName,
+                                category: category,
+                                difficulty: .easy
+                            )
+                            flashcards.append(flashcard)
+                        }
+                    }
+                    print("   Total images in \(directoryName): \(count)")
+                }
+            }
+        }
+        
+        print("📊 Total flashcards loaded: \(flashcards.count)")
+        return flashcards.sorted { $0.word < $1.word }
+    }
+    
     // MARK: - Flashcard Management
     
     func addFlashcard(_ flashcard: Flashcard) {
@@ -80,14 +142,16 @@ class FlashcardStore: ObservableObject {
     // MARK: - Persistence
     
     private func loadFlashcards() {
-        if let data = UserDefaults.standard.data(forKey: flashcardsKey),
-           let decoded = try? JSONDecoder().decode([Flashcard].self, from: data) {
-            flashcards = decoded
-        } else {
-            // Load sample data on first launch
+        // Always load flashcards dynamically from Images directory
+        flashcards = FlashcardStore.loadFlashcardsFromImages()
+        
+        // Fallback to sample data if no images found
+        if flashcards.isEmpty {
+            print("⚠️ No images found, falling back to sample data")
             flashcards = Flashcard.sampleData
-            saveFlashcards()
         }
+        
+        saveFlashcards()
     }
     
     private func saveFlashcards() {
