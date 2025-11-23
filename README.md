@@ -1,4 +1,4 @@
-# 🚀 Earlily 🌼
+# 🚀 EarLiLy 🌼
 A toddler-friendly iOS flashcard app that teaches early words through simple picture association. 📸✨ Built in SwiftUI and designed to grow with my daughter Lily. 🌱
 
 ## Brief description 📝
